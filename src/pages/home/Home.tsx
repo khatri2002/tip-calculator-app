@@ -1,9 +1,14 @@
+import { useEffect, useState } from "react";
+
 import { SubmitHandler, useForm } from "react-hook-form";
+import cn from "classnames";
+import CountUp from "react-countup";
+
+import { tips } from "./data";
+import { Inputs, Result } from "./types";
+import { allowDecimalNumberOnly, allowNumberOnly } from "./utils";
 import { iconDollar, iconPerson, logo } from "../../assets/images";
 import styles from "./Home.module.scss";
-import cn from "classnames";
-import { Inputs } from "./types";
-import { useEffect, useRef } from "react";
 
 const Home = () => {
   const {
@@ -14,31 +19,31 @@ const Home = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
+  const [result, setResult] = useState<Result>({
+    tipPerPerson: 0,
+    totalPerPerson: 0,
+  });
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    // console.log(data);
     const bill = Number(data.bill);
-    const tip =
-      data.tip !== "custom"
-        ? Number(data.tip)
-        : data.customTip
-          ? Number(data.customTip)
-          : 0;
-    console.log(tip);
-  };
+    const tip = Number(data.tip === "custom" ? data.customTip || 0 : data.tip);
+    const noOfPeople = Number(data.noOfPeople);
 
-  const allowDecimalNumberOnly = (e: React.FormEvent<HTMLInputElement>) => {
-    e.currentTarget.value = e.currentTarget.value.replace(/[^0-9.]/g, "");
-    const parts = e.currentTarget.value.split(".");
-    if (parts.length > 2)
-      e.currentTarget.value = parts[0] + "." + parts.slice(1).join("");
-  };
+    const tipAmount = (bill * tip) / 100;
+    const tipPerPerson = +(tipAmount / noOfPeople).toFixed(2);
+    const totalPerPerson = +((bill + tipAmount) / noOfPeople).toFixed(2);
 
-  const allowNumberOnly = (e: React.FormEvent<HTMLInputElement>) => {
-    e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, "");
+    setResult({
+      tipPerPerson,
+      totalPerPerson,
+    });
   };
 
   useEffect(() => {
+    // autofocus on customTip input if 'custom' is selected
     if (watch("tip") === "custom") setFocus("customTip");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watch("tip")]);
 
   return (
@@ -91,26 +96,21 @@ const Home = () => {
               </span>
             </div>
             <div className={styles.tipsContainer}>
-              <label htmlFor="5" className={styles.radioBtn}>
-                <input type="radio" id="5" {...register("tip")} value="5" />
-                <span className={styles.displayLabel}>5%</span>
-              </label>
-              <label htmlFor="10" className={styles.radioBtn}>
-                <input type="radio" id="10" {...register("tip")} value="10" />
-                <span className={styles.displayLabel}>10%</span>
-              </label>
-              <label htmlFor="15" className={styles.radioBtn}>
-                <input type="radio" id="15" {...register("tip")} value="15" />
-                <span className={styles.displayLabel}>15%</span>
-              </label>
-              <label htmlFor="25" className={styles.radioBtn}>
-                <input type="radio" id="25" {...register("tip")} value="25" />
-                <span className={styles.displayLabel}>25%</span>
-              </label>
-              <label htmlFor="50" className={styles.radioBtn}>
-                <input type="radio" id="50" {...register("tip")} value="50" />
-                <span className={styles.displayLabel}>50%</span>
-              </label>
+              {tips.map((tip, index) => (
+                <label
+                  key={index}
+                  htmlFor={`tip-${tip}`}
+                  className={styles.radioBtn}
+                >
+                  <input
+                    type="radio"
+                    id={`tip-${tip}`}
+                    {...register("tip")}
+                    value={tip}
+                  />
+                  <span className={styles.displayLabel}>{tip}%</span>
+                </label>
+              ))}
               <div className={styles.customWrapper}>
                 <label
                   htmlFor="custom"
@@ -188,14 +188,24 @@ const Home = () => {
                 <span className={styles.hero}>Tip Amount</span>
                 <span className={styles.sub}>/ person</span>
               </div>
-              <span className={styles.number}>&#36;0.00</span>
+              <CountUp
+                className={styles.number}
+                prefix="&#36;"
+                end={result.tipPerPerson}
+                decimals={2}
+              />
             </div>
             <div className={styles.value}>
               <div className={styles.label}>
                 <span className={styles.hero}>Total</span>
                 <span className={styles.sub}>/ person</span>
               </div>
-              <span className={styles.number}>&#36;0.00</span>
+              <CountUp
+                className={styles.number}
+                prefix="&#36;"
+                end={result.totalPerPerson}
+                decimals={2}
+              />
             </div>
           </div>
           <button

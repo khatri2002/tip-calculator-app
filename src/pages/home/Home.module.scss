@@ -1,12 +1,23 @@
+// breakpoints for custom styles
+$lg: 1024px;
+$sm: 640px;
+
 .main {
-  @apply bg-light-grayish-cyan font-space-mono flex min-h-screen flex-col items-center justify-center gap-y-16;
+  @apply bg-light-grayish-cyan font-space-mono flex min-h-screen flex-col items-center justify-center gap-y-9 pt-10 sm:gap-y-16 sm:pb-10;
 
   .container {
-    @apply grid grid-cols-2 gap-x-10 rounded-3xl bg-white py-8 pl-10 pr-8 shadow-lg;
+    @apply invisible grid translate-y-5 grid-cols-1 gap-6 rounded-t-3xl bg-white py-6 pl-6 pr-6 opacity-0 shadow-lg sm:gap-10 sm:rounded-b-3xl sm:py-8 sm:pl-10 sm:pr-8 md:grid-cols-2;
     width: 51rem;
+    animation: showUp 0.4s ease-in forwards;
+    @media (width < $lg) {
+      width: 90%;
+    }
+    @media (width < $sm) {
+      width: 100%;
+    }
 
     .form {
-      @apply space-y-8;
+      @apply space-y-6 sm:space-y-8;
 
       .field {
         .heading {
@@ -44,7 +55,7 @@
         }
 
         .tipsContainer {
-          @apply mt-3 grid grid-cols-3 gap-3;
+          @apply mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3;
 
           .radioBtn {
             @apply bg-very-dark-cyan relative cursor-pointer rounded-md py-2 transition duration-300;
@@ -95,7 +106,7 @@
     }
 
     .resultContainer {
-      @apply bg-very-dark-cyan flex flex-col justify-between rounded-3xl px-8 py-9;
+      @apply bg-very-dark-cyan flex flex-col justify-between gap-5 rounded-3xl px-6 py-6 sm:px-8 sm:py-9;
 
       .values {
         @apply mt-4 space-y-8;
@@ -114,7 +125,7 @@
           }
 
           .number {
-            @apply text-strong-cyan text-5xl font-bold;
+            @apply text-strong-cyan text-3xl font-bold sm:text-5xl;
           }
         }
       }
@@ -138,5 +149,23 @@
         }
       }
     }
+  }
+}
+
+@keyframes showUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+    visibility: hidden;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
   }
 }
