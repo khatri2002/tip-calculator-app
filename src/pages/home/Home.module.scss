@@ -1,0 +1,142 @@
+.main {
+  @apply bg-light-grayish-cyan font-space-mono flex min-h-screen flex-col items-center justify-center gap-y-16;
+
+  .container {
+    @apply grid grid-cols-2 gap-x-10 rounded-3xl bg-white py-8 pl-10 pr-8;
+    width: 50rem;
+
+    .form {
+      @apply space-y-8;
+
+      .field {
+        .heading {
+          @apply flex items-center justify-between text-sm font-semibold;
+
+          .label {
+            @apply text-dark-grayish-cyan;
+          }
+
+          .errorText {
+            @apply invisible text-red-400 opacity-0 transition duration-300;
+          }
+        }
+
+        .input {
+          @apply bg-very-light-grayish-cyan hover:border-strong-cyan focus-within:border-strong-cyan mt-2 flex cursor-pointer items-center rounded-md border-2 border-transparent transition duration-300;
+
+          .icon {
+            @apply pl-4;
+          }
+
+          input {
+            @apply text-very-dark-cyan w-full cursor-pointer rounded-md bg-transparent px-4 py-2 text-end text-xl font-semibold outline-none;
+          }
+        }
+
+        &.error {
+          .heading .errorText {
+            @apply visible opacity-100;
+          }
+
+          .input {
+            @apply border-red-400;
+          }
+        }
+
+        .tipsContainer {
+          @apply mt-3 grid grid-cols-3 gap-3;
+
+          .radioBtn {
+            @apply bg-very-dark-cyan relative cursor-pointer rounded-md py-2 transition duration-300;
+
+            input {
+              @apply invisible absolute opacity-0;
+            }
+
+            .displayLabel {
+              @apply block text-center text-xl font-semibold text-white transition duration-300;
+            }
+
+            &:has(input:checked),
+            &:hover {
+              @apply bg-light-grayish-cyan;
+
+              .displayLabel {
+                @apply text-very-dark-cyan;
+              }
+            }
+          }
+
+          .customWrapper {
+            @apply relative;
+
+            .customBtn {
+              @apply bg-very-light-grayish-cyan visible absolute w-full opacity-100 transition duration-300;
+
+              .displayLabel {
+                @apply text-dark-grayish-cyan;
+              }
+
+              &.hide {
+                @apply invisible opacity-0;
+              }
+            }
+
+            .customInput {
+              @apply bg-very-light-grayish-cyan text-very-dark-cyan hover:border-strong-cyan focus:border-strong-cyan invisible absolute h-full w-full cursor-pointer rounded-md border-2 border-transparent px-3 text-end text-xl font-semibold opacity-0 outline-none transition duration-300;
+
+              &.show {
+                @apply visible opacity-100;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .resultContainer {
+      @apply bg-very-dark-cyan flex flex-col justify-between rounded-3xl px-8 py-9;
+
+      .values {
+        @apply mt-4 space-y-8;
+
+        .value {
+          @apply flex items-center justify-between;
+
+          .label {
+            .hero {
+              @apply block text-sm text-white;
+            }
+
+            .sub {
+              @apply text-grayish-cyan mt-1 block text-xs;
+            }
+          }
+
+          .number {
+            @apply text-strong-cyan text-5xl font-bold;
+          }
+        }
+      }
+
+      .btn {
+        @apply bg-strong-cyan/45 text-very-dark-cyan relative w-full overflow-hidden rounded py-2 text-lg font-semibold uppercase transition duration-300 hover:shadow-lg active:scale-105;
+
+        span {
+          @apply relative;
+        }
+
+        &:before {
+          content: "";
+          @apply bg-strong-cyan absolute bottom-full left-0 h-full w-full rounded transition-all duration-300;
+        }
+
+        &:hover {
+          &:before {
+            @apply bottom-0;
+          }
+        }
+      }
+    }
+  }
+}
