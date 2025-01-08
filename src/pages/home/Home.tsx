@@ -14,7 +14,17 @@ const Home = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    // console.log(data);
+    const bill = Number(data.bill);
+    const tip =
+      data.tip !== "custom"
+        ? Number(data.tip)
+        : data.customTip
+          ? Number(data.customTip)
+          : 0;
+    console.log(tip);
+  };
 
   const allowDecimalNumberOnly = (e: React.FormEvent<HTMLInputElement>) => {
     e.currentTarget.value = e.currentTarget.value.replace(/[^0-9.]/g, "");
@@ -68,9 +78,17 @@ const Home = () => {
               />
             </div>
           </div>
-          <div className={styles.field}>
+          <div
+            className={cn({
+              [styles.field]: true,
+              [styles.error]: errors.customTip,
+            })}
+          >
             <div className={styles.heading}>
               <span className={styles.label}>Select Tip %</span>
+              <span className={styles.errorText}>
+                {errors.customTip?.message}
+              </span>
             </div>
             <div className={styles.tipsContainer}>
               <label htmlFor="5" className={styles.radioBtn}>
@@ -118,7 +136,13 @@ const Home = () => {
                   type="text"
                   id="customTip"
                   placeholder="0"
-                  {...register("customTip")}
+                  {...register("customTip", {
+                    pattern: {
+                      value: /^(?!\.$).+$/,
+                      message: "Invalid number",
+                    },
+                  })}
+                  onInput={allowDecimalNumberOnly}
                 />
               </div>
             </div>
