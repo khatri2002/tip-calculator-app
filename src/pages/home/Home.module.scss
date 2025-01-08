@@ -2,8 +2,8 @@
   @apply bg-light-grayish-cyan font-space-mono flex min-h-screen flex-col items-center justify-center gap-y-16;
 
   .container {
-    @apply grid grid-cols-2 gap-x-10 rounded-3xl bg-white py-8 pl-10 pr-8;
-    width: 50rem;
+    @apply grid grid-cols-2 gap-x-10 rounded-3xl bg-white py-8 pl-10 pr-8 shadow-lg;
+    width: 51rem;
 
     .form {
       @apply space-y-8;
